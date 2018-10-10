@@ -10,6 +10,7 @@ public class Participant {
 	public static final double BANKET_FEE = 20.0;
 	public static final LocalDateTime BANKET_DATETIME = LocalDateTime.of(2019, 9, 23, 19, 0);
 
+	private Long id; 
 	private String name;
 	private String surname;
 	private String email;
@@ -185,6 +186,19 @@ public class Participant {
 
 	public void setCash(boolean cash) {
 		this.cash = cash;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Participant [id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + "]";
 	}
 
 }

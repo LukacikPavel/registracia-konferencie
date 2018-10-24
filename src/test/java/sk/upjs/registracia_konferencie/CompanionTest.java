@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
+import sk.upjs.registracia_konferencie.entity.Companion;
+import sk.upjs.registracia_konferencie.entity.CompanionCategory;
+import sk.upjs.registracia_konferencie.entity.Tshirt;
+
 class CompanionTest {
 
 	

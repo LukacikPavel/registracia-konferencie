@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import sk.upjs.registracia_konferencie.entity.Participant;
 
 public class ParticipantFxModel {
 	private Participant participant;

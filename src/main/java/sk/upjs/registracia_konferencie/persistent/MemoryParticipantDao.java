@@ -1,7 +1,9 @@
-package sk.upjs.registracia_konferencie;
+package sk.upjs.registracia_konferencie.persistent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import sk.upjs.registracia_konferencie.entity.Participant;
 
 public class MemoryParticipantDao implements ParticipantDao {
 

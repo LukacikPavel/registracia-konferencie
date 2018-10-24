@@ -31,10 +31,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sk.upjs.registracia_konferencie.entity.Participant;
+import sk.upjs.registracia_konferencie.persistent.ParticipantDao;
+import sk.upjs.registracia_konferencie.persistent.DaoFactory;
 
 public class ParticipantsListController {
 
-	private ParticipantDao participantDao = ParticipantDaoFactory.INSTANCE.getParticipantDao();
+	private ParticipantDao participantDao = DaoFactory.INSTANCE.getParticipantDao();
 	private ObservableList<Participant> participantsModel;
 	private Map<String, BooleanProperty> columnsVisibility = new LinkedHashMap<>();
 	private ObjectProperty<Participant> selectedParticipant = new SimpleObjectProperty<>();

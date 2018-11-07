@@ -47,38 +47,34 @@ public class ParticipantsListController {
 
 	@FXML
 	private Button editParticipantButton;
+	
+	@FXML
+    private Button editWorkshopsButton;
 
 	@FXML
 	void initialize() {
 		participantsModel = FXCollections.observableArrayList(participantDao.getAll());
+		
+		editWorkshopsButton.setOnAction(new EventHandler<ActionEvent>() {
 
+			@Override
+			public void handle(ActionEvent event) {
+				WorkshopEditController workshopEditController = new WorkshopEditController();
+				showModalWindow(workshopEditController, "WorkshopEdit.fxml");
+			}
+		});
+		
 		editParticipantButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				try {
-					ParticipantEditController editController = new ParticipantEditController(selectedParticipant.get());
-					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ParticipantEdit.fxml"));
-					fxmlLoader.setController(editController);
-					Parent rootPane;
-					rootPane = fxmlLoader.load();
-					Scene scene = new Scene(rootPane);
-					
-					Stage dialog = new Stage();
-					dialog.setScene(scene);
-					dialog.initModality(Modality.APPLICATION_MODAL);
-					dialog.showAndWait();
-					
-					// tento kod sa spusti po zatvoreni okna
-					//participantsModel = FXCollections.observableArrayList(participantDao.getAll());
-					//participantsTableView.setItems(participantsModel);
-					participantsModel.setAll(participantDao.getAll());
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+				ParticipantEditController editController = new ParticipantEditController(selectedParticipant.get());
+				showModalWindow(editController, "ParticipantEdit.fxml");
+				
+				// tento kod sa spusti po zatvoreni okna
+				//participantsModel = FXCollections.observableArrayList(participantDao.getAll());
+				//participantsTableView.setItems(participantsModel);
+				participantsModel.setAll(participantDao.getAll());
 			}
 		});
 
@@ -123,9 +119,32 @@ public class ParticipantsListController {
 				@Override
 				public void changed(ObservableValue<? extends Participant> observable, Participant oldValue,
 						Participant newValue) {
+					if (newValue == null) {
+						editParticipantButton.setDisable(true);
+					} else {
+						editParticipantButton.setDisable(false);
+					}
 					selectedParticipant.set(newValue);
 					
 				}
 			});
+	}
+
+	private void showModalWindow(Object controller, String fxml) {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxml));
+			fxmlLoader.setController(controller);
+			Parent rootPane;
+			rootPane = fxmlLoader.load();
+			Scene scene = new Scene(rootPane);
+			
+			Stage dialog = new Stage();
+			dialog.setScene(scene);
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			dialog.showAndWait();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

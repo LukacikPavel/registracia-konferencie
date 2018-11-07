@@ -7,5 +7,8 @@ import sk.upjs.registracia_konferencie.entity.WorkShop;
 public interface WorkshopDao {
 
 	List<WorkShop> getAll();
-
+	
+	WorkShop save(WorkShop workshop);
+	
+	void delete(long id);
 }

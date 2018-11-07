@@ -11,8 +11,6 @@ import sk.upjs.registracia_konferencie.entity.CompanionCategory;
 import sk.upjs.registracia_konferencie.entity.Tshirt;
 
 class CompanionTest {
-
-	
 	
 	@Test
 	void testGetPrice1() {

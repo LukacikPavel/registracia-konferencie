@@ -61,4 +61,9 @@ public class WorkShop {
 		this.priceStudentLate = priceStudentLate;
 	}
 	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
 }

@@ -7,17 +7,17 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="432.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="365.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="24.0" layoutY="14.0" text="Editácia účastníka">
+      <Label layoutX="14.0" layoutY="14.0" text="Editácia účastníka">
          <font>
-            <Font size="16.0" />
+            <Font size="20.0" />
          </font>
       </Label>
-      <Label layoutX="24.0" layoutY="56.0" text="Meno" />
-      <Label layoutX="24.0" layoutY="95.0" text="Priezvisko" />
-      <TextField fx:id="nameTextField" layoutX="93.0" layoutY="52.0" />
-      <TextField fx:id="surnameTextField" layoutX="93.0" layoutY="91.0" />
-      <Button fx:id="saveButton" layoutX="370.0" layoutY="361.0" mnemonicParsing="false" text="Uložiť" />
+      <Label layoutX="16.0" layoutY="54.0" text="Meno" />
+      <Label layoutX="16.0" layoutY="90.0" text="Priezvisko" />
+      <TextField fx:id="nameTextField" layoutX="96.0" layoutY="50.0" />
+      <TextField fx:id="surnameTextField" layoutX="96.0" layoutY="86.0" />
+      <Button fx:id="saveButton" layoutX="293.0" layoutY="472.0" mnemonicParsing="false" text="Uložiť" />
    </children>
 </AnchorPane>

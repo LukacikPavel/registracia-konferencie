@@ -12,21 +12,21 @@ import org.junit.jupiter.api.Test;
 import sk.upjs.registracia_konferencie.entity.Companion;
 import sk.upjs.registracia_konferencie.entity.CompanionCategory;
 import sk.upjs.registracia_konferencie.entity.Participant;
-import sk.upjs.registracia_konferencie.entity.WorkShop;
+import sk.upjs.registracia_konferencie.entity.Workshop;
 
 class ParticipantTest {
 
-	WorkShop cidmWorkshop;
-	WorkShop slonlpWorkshop;
+	Workshop cidmWorkshop;
+	Workshop slonlpWorkshop;
 
 	@BeforeEach
 	public void setBefore() {
-		cidmWorkshop = new WorkShop();
+		cidmWorkshop = new Workshop();
 		cidmWorkshop.setPriceFull(355);
 		cidmWorkshop.setPriceStudent(295);
 		cidmWorkshop.setPriceFullLate(380);
 		cidmWorkshop.setPriceStudentLate(320);
-		slonlpWorkshop = new WorkShop();
+		slonlpWorkshop = new Workshop();
 		slonlpWorkshop.setPriceFull(245);
 		slonlpWorkshop.setPriceStudent(195);
 		slonlpWorkshop.setPriceFullLate(265);

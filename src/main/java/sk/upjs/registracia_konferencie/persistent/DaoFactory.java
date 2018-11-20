@@ -6,31 +6,30 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 
 public enum DaoFactory {
 	INSTANCE;
-
-	private ParticipantDao participantDao;
+	
 	private JdbcTemplate jdbcTemplate;
+	private ParticipantDao participantDao;
 	private WorkshopDao workshopDao;
 	
+	public ParticipantDao getParticipantDao() {
+		if (participantDao == null)
+			participantDao = new MemoryParticipantDao();
+		return participantDao;
+	}
+	
 	public WorkshopDao getWorkshopDao() {
-		if(workshopDao == null) {
-			workshopDao = new MysqlWorkshopDao(jdbcTemplate);
+		if (workshopDao == null) {
+			workshopDao = new MysqlWorkshopDao(getJdbcTemplate());
 		}
 		return workshopDao;
 	}
 	
-	public ParticipantDao getParticipantDao() {
-		if (participantDao == null) {
-			participantDao = new MemoryParticipantDao();
-		}
-		return participantDao;
-	}
-
 	private JdbcTemplate getJdbcTemplate() {
 		if (jdbcTemplate == null) {
 			MysqlDataSource dataSource = new MysqlDataSource();
 			dataSource.setUser("registracia_itat");
 			dataSource.setPassword("paz1c");
-			dataSource.setDatabaseName("registracia_itat");
+//			dataSource.setDatabaseName("registracia_itat");
 			dataSource.setUrl("jdbc:mysql://localhost/registracia_itat?serverTimezone=Europe/Bratislava");
 			jdbcTemplate = new JdbcTemplate(dataSource);
 		}

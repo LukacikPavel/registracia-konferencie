@@ -1,36 +1,40 @@
 package sk.upjs.registracia_konferencie.persistent;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import sk.upjs.registracia_konferencie.entity.Participant;
+import sk.upjs.registracia_konferencie.entity.Tshirt;
 
 public class MemoryParticipantDao implements ParticipantDao {
-
+	
 	private List<Participant> participants = new ArrayList<>();
 	private long lastId = 0;
-
+	
 	public MemoryParticipantDao() {
-		// TODO pre testovacie ucely - potom zmazat
-
+		//TODO pre testovacie ucely - potom zmazat
+		//FIXME participant nema vsetko vyplnene
 		Participant p = new Participant();
 		p.setName("Andrej");
 		p.setSurname("Kiska");
 		p.setEmail("prezident@prezident.sk");
+		p.setTshirt(Tshirt.S);
+		p.setStart(LocalDateTime.now());
 		this.add(p);
-
+		
 		Participant p2 = new Participant();
 		p2.setName("Mária");
 		p2.setSurname("Trošková");
 		this.add(p2);
 	}
-
+	
 	@Override
 	public void add(Participant participant) {
 		participant.setId(++lastId);
 		participants.add(participant);
 	}
-
+	
 	@Override
 	public List<Participant> getAll() {
 		return participants;
@@ -51,5 +55,4 @@ public class MemoryParticipantDao implements ParticipantDao {
 			}
 		}
 	}
-
 }

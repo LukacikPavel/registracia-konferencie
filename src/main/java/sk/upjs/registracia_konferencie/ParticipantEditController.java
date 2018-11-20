@@ -11,7 +11,8 @@ import sk.upjs.registracia_konferencie.persistent.DaoFactory;
 
 public class ParticipantEditController {
 
-	private ParticipantDao participantDao = DaoFactory.INSTANCE.getParticipantDao();
+	private ParticipantDao participantDao 
+		= DaoFactory.INSTANCE.getParticipantDao();
 	private Participant participant;
 	private ParticipantFxModel participantModel;
 	
@@ -25,9 +26,9 @@ public class ParticipantEditController {
     private Button saveButton;
 
     public ParticipantEditController(Participant participant) {
-		this.participant = participant;
-		this.participantModel = new ParticipantFxModel(participant);
-	}
+    	this.participant = participant;
+    	this.participantModel = new ParticipantFxModel(participant);
+    }
 
 	@FXML
     void initialize() {
@@ -35,7 +36,6 @@ public class ParticipantEditController {
     	surnameTextField.textProperty().bindBidirectional(participantModel.surnameProperty());
     	
     	saveButton.setOnAction(new EventHandler<ActionEvent>() {
-			
 			@Override
 			public void handle(ActionEvent event) {
 				participantDao.save(participantModel.getParticipant());
@@ -44,4 +44,3 @@ public class ParticipantEditController {
 		});
     }
 }
-

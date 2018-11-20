@@ -2,7 +2,7 @@ package sk.upjs.registracia_konferencie.entity;
 
 import java.time.LocalDate;
 
-public class WorkShop {
+public class Workshop {
 	private Long id;
 	private String name;
 	private LocalDate start;
@@ -60,10 +60,8 @@ public class WorkShop {
 	public void setPriceStudentLate(double priceStudentLate) {
 		this.priceStudentLate = priceStudentLate;
 	}
-	
 	@Override
 	public String toString() {
 		return name;
 	}
-	
 }

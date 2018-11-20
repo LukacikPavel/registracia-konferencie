@@ -2,13 +2,13 @@ package sk.upjs.registracia_konferencie.persistent;
 
 import java.util.List;
 
-import sk.upjs.registracia_konferencie.entity.WorkShop;
+import sk.upjs.registracia_konferencie.entity.Workshop;
 
 public interface WorkshopDao {
 
-	List<WorkShop> getAll();
+	List<Workshop> getAll();
 	
-	WorkShop save(WorkShop workshop);
+	Workshop save(Workshop workshop);
 	
 	void delete(long id);
 }

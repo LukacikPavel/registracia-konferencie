@@ -1,10 +1,9 @@
 package sk.upjs.registracia_konferencie;
 
-import java.awt.TextField;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -24,100 +23,179 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import sk.upjs.registracia_konferencie.entity.Participant;
+import sk.upjs.registracia_konferencie.entity.Tshirt;
 import sk.upjs.registracia_konferencie.persistent.ParticipantDao;
 import sk.upjs.registracia_konferencie.persistent.DaoFactory;
 
 public class ParticipantsListController {
 
-	private ParticipantDao participantDao = DaoFactory.INSTANCE.getParticipantDao();
+	private ParticipantDao participantDao 
+				= DaoFactory.INSTANCE.getParticipantDao();
 	private ObservableList<Participant> participantsModel;
 	private Map<String, BooleanProperty> columnsVisibility = new LinkedHashMap<>();
 	private ObjectProperty<Participant> selectedParticipant = new SimpleObjectProperty<>();
-
-	@FXML
-	private TableView<Participant> participantsTableView;
-
-	@FXML
-	private Button editParticipantButton;
 	
-	@FXML
+    @FXML
+    private TableView<Participant> participantsTableView;
+    
+    @FXML
+    private Button editParticipantButton;
+    
+    @FXML
     private Button editWorkshopsButton;
-
-	@FXML
-	void initialize() {
-		participantsModel = FXCollections.observableArrayList(participantDao.getAll());
-		
-		editWorkshopsButton.setOnAction(new EventHandler<ActionEvent>() {
+	
+    @FXML
+    void initialize() {
+    	participantsModel = FXCollections.observableArrayList(participantDao.getAll());
+    	
+    	editWorkshopsButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				WorkshopEditController workshopEditController = new WorkshopEditController();
-				showModalWindow(workshopEditController, "WorkshopEdit.fxml");
+				WorkshopEditController editController = new WorkshopEditController();            
+				showModalWindow(editController, "WorkshopEdit.fxml");
 			}
 		});
-		
-		editParticipantButton.setOnAction(new EventHandler<ActionEvent>() {
-
+    	
+    	editParticipantButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				ParticipantEditController editController = new ParticipantEditController(selectedParticipant.get());
-				showModalWindow(editController, "ParticipantEdit.fxml");
+					ParticipantEditController editController = 
+							new ParticipantEditController(selectedParticipant.get());            
+					showModalWindow(editController, "ParticipantEdit.fxml");
+					// tento kod sa spusti az po zatvoreni okna
+					participantsModel.setAll(participantDao.getAll());
+			}
+		});
+    	
+    	TableColumn<Participant, Long> idCol = new TableColumn<>("ID");
+    	idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+    	participantsTableView.getColumns().add(idCol);
+    	columnsVisibility.put("ID", idCol.visibleProperty());
+
+    	TableColumn<Participant, String> nameCol = new TableColumn<>("Meno");
+    	nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+    	participantsTableView.getColumns().add(nameCol);
+    	columnsVisibility.put("Meno", nameCol.visibleProperty());
+
+    	TableColumn<Participant, String> surnameCol = new TableColumn<>("Priezvisko");
+    	surnameCol.setCellValueFactory(new PropertyValueFactory<>("surname"));
+    	participantsTableView.getColumns().add(surnameCol);
+    	columnsVisibility.put("Priezvisko", surnameCol.visibleProperty());
+    	
+    	TableColumn<Participant, String> emailCol = new TableColumn<>("E-mail");
+    	emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+    	emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
+    	emailCol.setEditable(true);
+    	emailCol.setVisible(false);
+    	participantsTableView.getColumns().add(emailCol);
+    	columnsVisibility.put("E-mail", emailCol.visibleProperty());
+    	
+    	
+    	TableColumn<Participant, Tshirt> tshirtCol = new TableColumn<>("Tričko");
+    	tshirtCol.setCellValueFactory(new PropertyValueFactory<>("tshirt"));
+    	tshirtCol.setCellFactory(new Callback<TableColumn<Participant,Tshirt>, TableCell<Participant,Tshirt>>() {
+			
+			@Override
+			public TableCell<Participant, Tshirt> call(TableColumn<Participant, Tshirt> param) {
+				return new ComboBoxTableCell<>(new StringConverter<Tshirt>() {
+
+					@Override
+					public String toString(Tshirt object) {
+						return object==null ? "" : object.name();
+					}
+
+					@Override
+					public Tshirt fromString(String string) {
+						return string==null ? null : Tshirt.valueOf(string);
+					}
+				});
+			}
+		});
+    	participantsTableView.getColumns().add(tshirtCol);
+    	columnsVisibility.put("Tričko", tshirtCol.visibleProperty());
+   	
+    	
+    	
+    	
+    	TableColumn<Participant, LocalDateTime> startCol = new TableColumn<>("Začiatok");
+//    	startCol.setCellFactory(new Callback<TableColumn<Participant,LocalDateTime>, TableCell<Participant,LocalDateTime>>() {
+//			
+//			@Override
+//			public TableCell<Participant, LocalDateTime> call(TableColumn<Participant, LocalDateTime> param) {
+//				return new TableCell<Participant, LocalDateTime>() {
+//					
+//					@Override
+//					protected void updateItem(LocalDateTime item, boolean empty) {
+//						super.updateItem(item, empty);
+//						if (empty || item == null)
+//							setText("");
+//						else
+//							setText(item.toString());
+//					}
+//				};
+//			}
+//		});
+    	
+    	startCol.setCellFactory((TableColumn<Participant, LocalDateTime> param) -> {
+			return new TableCell<Participant, LocalDateTime>() {
+				private DateTimeFormatter formatter = 
+						DateTimeFormatter.ofPattern("d.M.yyyy H:m");
 				
-				// tento kod sa spusti po zatvoreni okna
-				//participantsModel = FXCollections.observableArrayList(participantDao.getAll());
-				//participantsTableView.setItems(participantsModel);
-				participantsModel.setAll(participantDao.getAll());
-			}
-		});
-
-		TableColumn<Participant, Long> idCol = new TableColumn<>("ID");
-		idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-		participantsTableView.getColumns().add(idCol);
-		columnsVisibility.put("ID", idCol.visibleProperty());
-
-		TableColumn<Participant, String> nameCol = new TableColumn<>("Name");
-		nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-		participantsTableView.getColumns().add(nameCol);
-		columnsVisibility.put("Meno", nameCol.visibleProperty());
-
-		TableColumn<Participant, String> surnameCol = new TableColumn<>("Surname");
-		surnameCol.setCellValueFactory(new PropertyValueFactory<>("surname"));
-		participantsTableView.getColumns().add(surnameCol);
-		columnsVisibility.put("Prizvisko", surnameCol.visibleProperty());
-
-		TableColumn<Participant, String> emailCol = new TableColumn<>("E-mail");
-		emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
-		emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		emailCol.setEditable(true);
-		emailCol.setVisible(false);
-		participantsTableView.getColumns().add(emailCol);
-		columnsVisibility.put("E-mail", emailCol.visibleProperty());
-
-		participantsTableView.setItems(participantsModel);
-		participantsTableView.setEditable(true);
-
-		ContextMenu contextMenu = new ContextMenu();
-
-		for (Entry<String, BooleanProperty> entry : columnsVisibility.entrySet()) {
-			CheckMenuItem menuItem = new CheckMenuItem(entry.getKey());
-			menuItem.selectedProperty().bindBidirectional(entry.getValue());
-			contextMenu.getItems().add(menuItem);
-		}
-		participantsTableView.setContextMenu(contextMenu);
-		
-		participantsTableView.getSelectionModel().
-			selectedItemProperty().addListener(new ChangeListener<Participant>() {
-
 				@Override
-				public void changed(ObservableValue<? extends Participant> observable, Participant oldValue,
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty || item == null)
+						setText("");
+					else
+						setText(formatter.format(item));
+				}
+			};
+		});
+    	
+//    	startCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Participant,LocalDateTime>, ObservableValue<LocalDateTime>>() {
+//			
+//			@Override
+//			public ObservableValue<LocalDateTime> call(CellDataFeatures<Participant, LocalDateTime> param) {
+//				return new SimpleObjectProperty<>(param.getValue().getStart());
+//			}
+//		});
+    	
+    	startCol.setCellValueFactory( param -> {
+				return new SimpleObjectProperty<>(param.getValue().getStart());			
+		});
+    	participantsTableView.getColumns().add(startCol);
+    	columnsVisibility.put("Začiatok", startCol.visibleProperty());
+    	
+    	
+    	participantsTableView.setItems(participantsModel);
+    	participantsTableView.setEditable(true);
+
+    	ContextMenu contextMenu = new ContextMenu();
+    	for (Entry<String, BooleanProperty> entry: columnsVisibility.entrySet()) {
+	    	CheckMenuItem menuItem = new CheckMenuItem(entry.getKey());
+	    	menuItem.selectedProperty().bindBidirectional(entry.getValue());
+	    	contextMenu.getItems().add(menuItem);
+    	}
+    	participantsTableView.setContextMenu(contextMenu);
+    	
+    	participantsTableView.getSelectionModel().
+    		selectedItemProperty().addListener(new ChangeListener<Participant>() {
+				@Override
+				public void changed(ObservableValue<? extends Participant> observable, 
+						Participant oldValue,
 						Participant newValue) {
 					if (newValue == null) {
 						editParticipantButton.setDisable(true);
@@ -125,18 +203,16 @@ public class ParticipantsListController {
 						editParticipantButton.setDisable(false);
 					}
 					selectedParticipant.set(newValue);
-					
 				}
 			});
-	}
+    }
 
 	private void showModalWindow(Object controller, String fxml) {
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxml));
+			FXMLLoader fxmlLoader = new	FXMLLoader(getClass().getResource(fxml));
 			fxmlLoader.setController(controller);
-			Parent rootPane;
-			rootPane = fxmlLoader.load();
-			Scene scene = new Scene(rootPane);
+			Parent rootPane	= fxmlLoader.load();
+			Scene scene	= new Scene(rootPane);
 			
 			Stage dialog = new Stage();
 			dialog.setScene(scene);

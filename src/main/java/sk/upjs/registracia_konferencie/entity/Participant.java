@@ -6,11 +6,8 @@ import java.util.List;
 public class Participant {
 
 	public static final double SINGLE_ROOM_FEE = 75.0;
-	public static final double[] COMPANION_FEES = new double[] { 60.0, 110.0, 165.0, 210.0 };
-	public static final double BANKET_FEE = 20.0;
-	public static final LocalDateTime BANKET_DATETIME = LocalDateTime.of(2019, 9, 23, 19, 0);
 
-	private Long id; 
+	private Long id;
 	private String name;
 	private String surname;
 	private String email;
@@ -25,38 +22,32 @@ public class Participant {
 	private LocalDateTime start;
 	private LocalDateTime end;
 	private List<Companion> companions;
-	private WorkShop workshop;
+	private Workshop workshop;
 	private boolean cash;
 
 	public double finalPrice() {
-		double price = 0;
-		
-		if(early && student) {
-			price = workshop.getPriceStudent();
-		}
-		
-		if(early && !student) {
-			price = workshop.getPriceFull();
-		}
-		
-		if(!early && student) {
-			price = workshop.getPriceStudentLate();
-		}
-		
-		if(!early && !student) {
-			price = workshop.getPriceFullLate();
-		}
-		
-		if(singleRoom && !student) {
-			price += SINGLE_ROOM_FEE;
-		}
-		
-		if(companions != null) {
-			for(Companion companion: companions) {
-				price += companion.getPrice();			
+		double price = 0.0;
+		if (this.early) {
+			if (this.student) {
+				price = workshop.getPriceStudent();
+			} else {
+				price = workshop.getPriceFull();
+			}
+		} else {
+			if (this.student) {
+				price = workshop.getPriceStudentLate();
+			} else {
+				price = workshop.getPriceFullLate();
 			}
 		}
-		
+		if (companions != null) {
+			for (Companion companion : companions) {
+				price += companion.getPrice();
+			}
+		}
+		if (singleRoom) {
+			price += SINGLE_ROOM_FEE;
+		}
 		return price;
 	}
 
@@ -172,11 +163,11 @@ public class Participant {
 		this.companions = companions;
 	}
 
-	public WorkShop getWorkshop() {
+	public Workshop getWorkshop() {
 		return workshop;
 	}
 
-	public void setWorkshop(WorkShop workshop) {
+	public void setWorkshop(Workshop workshop) {
 		this.workshop = workshop;
 	}
 
